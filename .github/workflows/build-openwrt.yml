@@ -65,7 +65,8 @@ jobs:
     - name: 克隆插件源码
       working-directory: openwrt/package
       run: |
-        git clone ${{ github.event.inputs.plugin_source }} plugin
+        git clone ${{ github.event.inputs.plugin_source }} temp_repo
+        cd temp_repo && mv ${{ github.event.inputs.plugin_source_dir }} ../plugin && cd ..
         cd plugin
 
         chmod +x $GITHUB_WORKSPACE/.github/scripts/get_plugin_info.sh
