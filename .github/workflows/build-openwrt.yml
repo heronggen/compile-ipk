@@ -18,7 +18,7 @@ on:
       plugin_source_dir:
         description: '插件源码文件夹'
         required: true
-        default: 'luci-app-accesscontrol-plus'
+        default: ''
       
 
 jobs:
@@ -71,9 +71,16 @@ jobs:
       working-directory: openwrt/package
       run: |
         git clone ${{ github.event.inputs.plugin_source }} temp_repo
-        cd temp_repo && mv ${{ github.event.inputs.plugin_source_dir }} ../plugin && cd ..
+        if [ -z "${{ github.event.inputs.plugin_source_dir }}" ]; then
+           # 如果 plugin_source_dir 变量长度为 0，则将 temp_repo 重命名为 plugin
+           mv temp_repo plugin
+        else
+          # 如果 plugin_source_dir 变量长度大于 0，则执行 mv 操作后删除 temp_repo
+          cd temp_repo && mv ${{ github.event.inputs.plugin_source_dir }} ../plugin && cd ..
+          rm -rf temp_repo
+        fi
         cd plugin
-
+        
         chmod +x $GITHUB_WORKSPACE/.github/scripts/get_plugin_info.sh
         $GITHUB_WORKSPACE/.github/scripts/get_plugin_info.sh
 
