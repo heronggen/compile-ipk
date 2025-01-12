@@ -17,7 +17,7 @@ on:
         default: 'https://github.com/heronggen/luci-app-accesscontrol-plus.git'
       plugin_source_dir:
         description: '插件源码文件夹'
-        required: true
+        required: false
         default: ''
       
 
